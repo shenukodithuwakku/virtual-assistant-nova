@@ -11,6 +11,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <!-- Bootsrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
   
 
     <!-- Particle js -->
@@ -27,9 +31,10 @@
 </head>
 
 <body>
+     
+    <div class="container">
 
-
-     <section id="Oval" class="mb-4">
+            <section id="Oval" class="mb-4" >
 
             <div class="row">
                 <div class="col-md-1">
@@ -70,7 +75,33 @@
                 <div class="col-md-1"></div>
             </div>
     
-        </section>
+            </section>
+
+
+            <section id="SiriWave" class="mb-4" hidden>
+                
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                                 
+                                <div class="">
+                                
+                                 <p class="text-start text-light mb-4 siri-message">Lorem ipsum dolor sit am</p>
+                                 <div id="siri-container"></div>
+
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+    </div>
+
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -80,8 +111,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
+    
 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
     <script src="script.js"></script>
+
+
+    <!-- Siri wave -->
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+
+
 
 
     <script src="assets/vendore/texllate/jquery.fittext.js"></script> 
