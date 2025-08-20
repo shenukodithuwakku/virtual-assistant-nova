@@ -39,9 +39,9 @@ cursor.execute(query)
 
 #conn.close()
 
-#query = "INSERT INTO contacts VALUES (null,'amma', '0710921775', 'null')"
-#cursor.execute(query)
-#conn.commit()
+query = "INSERT INTO contacts VALUES (null,'papa', '+94773954126', 'null')"
+cursor.execute(query)
+conn.commit()
 
 
 query = 'kalana'

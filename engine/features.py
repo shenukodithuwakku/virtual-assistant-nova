@@ -4,20 +4,20 @@ from shlex import quote
 import sqlite3
 import struct
 import subprocess
-from time import time
+import time
 import webbrowser
 from playsound import playsound
 import eel
-import pvporcupine
 import pyaudio
 import pyautogui
 from engine.command import speak
 from engine.config import ASSISTANT_NAME
-
-
+# Playing assiatnt sound function
 import pywhatkit as kit
+import pvporcupine
 
 from engine.helper import extract_yt_term, remove_words
+from hugchat import hugchat
 
 conn = sqlite3.connect("Nova.db")
 cursor = conn.cursor()
@@ -27,6 +27,7 @@ def playAssistantSound():
     music_dir = "www\\assets\\audio\\start_sound.mp3"
     playsound(music_dir)
 
+    
 def openCommand(query):
     query = query.replace(ASSISTANT_NAME, "")
     query = query.replace("open", "")
@@ -65,11 +66,11 @@ def openCommand(query):
 
        
 
-def playYoutube(query):
+def PlayYoutube(query):
     search_term = extract_yt_term(query)
-    speak("playing "+search_term+" on Youtube")
+    speak("Playing "+search_term+" on YouTube")
     kit.playonyt(search_term)
-    
+
 
 def hotword():
     porcupine=None
@@ -77,24 +78,24 @@ def hotword():
     audio_stream=None
     try:
        
-         
+        # pre trained keywords    
         porcupine=pvporcupine.create(keywords=["Nova","alexa"]) 
         paud=pyaudio.PyAudio()
         audio_stream=paud.open(rate=porcupine.sample_rate,channels=1,format=pyaudio.paInt16,input=True,frames_per_buffer=porcupine.frame_length)
         
-        
+        # loop for streaming
         while True:
             keyword=audio_stream.read(porcupine.frame_length)
             keyword=struct.unpack_from("h"*porcupine.frame_length,keyword)
 
-          
+            # processing keyword comes from mic 
             keyword_index=porcupine.process(keyword)
 
-            
+            # checking first keyword detetcted for not
             if keyword_index>=0:
                 print("hotword detected")
 
-               
+                # pressing shorcut key win+j
                 import pyautogui as autogui
                 autogui.keyDown("win")
                 autogui.press("j")
@@ -110,6 +111,8 @@ def hotword():
             paud.terminate()
 
 
+
+# find contacts
 def findContact(query):
     
     words_to_remove = [ASSISTANT_NAME, 'make', 'a', 'to', 'phone', 'call', 'send', 'message', 'wahtsapp', 'video']
@@ -134,28 +137,30 @@ def whatsApp(mobile_no, message, flag, name):
     
 
     if flag == 'message':
-        target_tab = 13
-        Nova_message = "message send successfully to "+name
+        target_tab = 12
+        jarvis_message = "message send successfully to "+name
 
     elif flag == 'call':
-        target_tab = 8
-        message = ''
-        Nova_message = "calling to "+name
-
-    else:
         target_tab = 7
         message = ''
-        Nova_message = "staring video call with "+name
+        jarvis_message = "calling to "+name
 
+    else:
+        target_tab = 6
+        message = ''
+        jarvis_message = "staring video call with "+name
+
+
+    # Encode the message for URL
     encoded_message = quote(message)
     print(encoded_message)
-    
+    # Construct the URL
     whatsapp_url = f"whatsapp://send?phone={mobile_no}&text={encoded_message}"
 
-    
+    # Construct the full command
     full_command = f'start "" "{whatsapp_url}"'
 
-    
+    # Open WhatsApp with the constructed URL using cmd.exe
     subprocess.run(full_command, shell=True)
     time.sleep(5)
     subprocess.run(full_command, shell=True)
@@ -166,4 +171,49 @@ def whatsApp(mobile_no, message, flag, name):
         pyautogui.hotkey('tab')
 
     pyautogui.hotkey('enter')
-    speak(Nova_message)
+    speak(jarvis_message)
+
+# chat bot 
+def chatBot(query):
+    user_input = query.lower()
+    chatbot = hugchat.ChatBot(cookie_path="engine\cookies.json")
+    id = chatbot.new_conversation()
+    chatbot.change_conversation(id)
+    response =  chatbot.chat(user_input)
+    print(response)
+    speak(response)
+    return response
+
+# android automation
+
+def makeCall(name, mobileNo):
+    mobileNo =mobileNo.replace(" ", "")
+    speak("Calling "+name)
+    command = 'adb shell am start -a android.intent.action.CALL -d tel:'+mobileNo
+    os.system(command)
+
+
+# to send message
+def sendMessage(message, mobileNo, name):
+    from engine.helper import replace_spaces_with_percent_s, goback, keyEvent, tapEvents, adbInput
+    message = replace_spaces_with_percent_s(message)
+    mobileNo = replace_spaces_with_percent_s(mobileNo)
+    speak("sending message")
+    goback(4)
+    time.sleep(1)
+    keyEvent(3)
+    # open sms app
+    tapEvents(136, 2220)
+    #start chat
+    tapEvents(819, 2192)
+    # search mobile no
+    adbInput(mobileNo)
+    #tap on name
+    tapEvents(601, 574)
+    # tap on input
+    tapEvents(390, 2270)
+    #message
+    adbInput(message)
+    #send
+    tapEvents(957, 1397)
+    speak("message send successfully to "+name)
