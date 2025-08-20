@@ -30,7 +30,7 @@ def takecommand():
     try:
         print("Recognizing...")
         eel.DisplayMessage("Recognizing...")
-        query = r.recognize_google(audio, language='en-US')
+        query = r.recognize_google(audio, language='en-UK')
         print(f"User said: {query}")
         eel.DisplayMessage(query)
         time.sleep(2)
@@ -43,20 +43,55 @@ def takecommand():
 
 @eel.expose
 def allCommands():
+ 
+    try:
+            query = takecommand()
+            print(query)
 
-    query = takecommand()
-    print(query)
+            if "open" in query:
+                from engine.features import openCommand
+                openCommand(query)
 
-    if "open" in query:
-         from engine.features import openCommand
-         openCommand(query)
+            elif "on youtube" in query:
+                from engine.features import playYoutube
+                playYoutube(query)
 
-    elif "on youtube":
-        from engine.features import playYoutube
-        playYoutube(query)
+            elif "send message" in query or "phone call" in query or "video call" in query:
+                from engine.features import findContact, whatsApp, makeCall, sendMessage
+                contact_no, name = findContact(query)
+                if(contact_no != 0):
+                    speak("Which mode you want to use whatsapp or mobile")
+                    preferance = takecommand()
+                    print(preferance)
+
+                    if "mobile" in preferance:
+                        if "send message" in query or "send sms" in query: 
+                            speak("what message to send")
+                            message = takecommand()
+                            sendMessage(message, contact_no, name)
+                        elif "phone call" in query:
+                            makeCall(name, contact_no)
+                        else:
+                            speak("please try again")
+                    elif "whatsapp" in preferance:
+                        message = ""
+                        if "send message" in query:
+                            message = 'message'
+                            speak("what message to send")
+                            query = takecommand()
+                                            
+                        elif "phone call" in query:
+                            message = 'call'
+                        else:
+                            message = 'video call'
+                                            
+                        whatsApp(contact_no, query, message, name)
 
 
-    else:
-        print("not run")
+            else:
+                print("not run")
+
+    except:
+        print("error")
 
     eel.ShowHood()
