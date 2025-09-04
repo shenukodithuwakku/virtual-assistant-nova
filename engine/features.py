@@ -18,6 +18,7 @@ import pvporcupine
 
 from engine.helper import extract_yt_term, remove_words
 from hugchat import hugchat
+from weather_time import get_current_time, get_current_date, get_weather_live, speak
 
 conn = sqlite3.connect("Nova.db")
 cursor = conn.cursor()
@@ -216,3 +217,45 @@ def sendMessage(message, mobileNo, name):
     #send
     tapEvents(957, 1397)
     speak("message send successfully to "+name)
+
+# voice command handler
+
+@eel.expose
+def handle_voice_command(query):
+    api_key = "a344b11b2c9c0b4ff020f783b7cf44ba"
+    user_input = query.lower()
+    response = ""
+    if "weather" in user_input:
+        weather_text = get_weather_live(api_key)
+        speak(weather_text)
+        response += weather_text + "\n"
+    if "time" in user_input:
+        time_text = get_current_time()
+        speak(time_text)
+        response += time_text + "\n"
+    if "date" in user_input:
+        date_text = get_current_date()
+        speak(date_text)
+        response += date_text + "\n"
+    if not response:
+        response = "Sorry, I can only tell you the date, time, or weather right now."
+    return response.strip()
+
+@eel.expose
+def get_all_info():
+    api_key = "a344b11b2c9c0b4ff020f783b7cf44ba"
+    date_text = get_current_date()
+    time_text = get_current_time()
+    weather_text = get_weather_live(api_key)
+    speak(date_text)
+    speak(time_text)
+    speak(weather_text)
+    return f"{date_text}\n{time_text}\n{weather_text}"
+
+import eel
+from engine.command import set_voice  # You need to implement this
+
+@eel.expose
+def change_voice():
+    result = set_voice("female")  # or "male"
+    return result

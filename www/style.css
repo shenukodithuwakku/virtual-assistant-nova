@@ -274,3 +274,12 @@ svg {
     transform: rotate(360deg);
   }
 }
+
+.dark-mode {
+    background-color: #181818 !important;
+    color: #f1f1f1 !important;
+}
+.dark-mode .input-field {
+    background: #222 !important;
+    color: #fff !important;
+}

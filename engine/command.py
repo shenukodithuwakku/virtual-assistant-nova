@@ -5,6 +5,7 @@ import eel
 
 
 def speak(text):
+    text = str(text)
     engine = pyttsx3.init('sapi5')
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[1].id)  
@@ -106,3 +107,13 @@ def allCommands(message=1):
         print("error")
 
     eel.ShowHood()
+
+def set_voice(gender):
+    import pyttsx3
+    engine = pyttsx3.init('sapi5')
+    voices = engine.getProperty('voices')
+    for voice in voices:
+        if gender in voice.name.lower():
+            engine.setProperty('voice', voice.id)
+            return f"{gender.capitalize()} voice set!"
+    return "Voice not found."

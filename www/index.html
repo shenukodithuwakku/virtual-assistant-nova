@@ -30,7 +30,7 @@
 
 </head>
 
-<body>
+<body id="mainBody">
 
     <div class="container">
 
@@ -71,7 +71,10 @@
                                 <button id="ChatBtn" class="glow-on-hover" data-bs-toggle="offcanvas"
                                     data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i
                                         class="bi bi-chat-dots"></i></button>
-                                <button id="SettingsBtn" class="glow-on-hover"><i class="bi bi-gear"></i></button>
+                                <button id="SettingsBtn" class="glow-on-hover" data-bs-toggle="offcanvas"
+                                    data-bs-target="#settingsOffcanvas" aria-controls="settingsOffcanvas">
+                                    <i class="bi bi-gear"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -117,6 +120,23 @@
 
         </div>
 
+    </div>
+
+    <!-- Settings Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="settingsOffcanvas" aria-labelledby="settingsOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="settingsOffcanvasLabel">Settings</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group">
+                <li class="list-group-item" id="changeVoice">Change Voice</li>
+                <li class="list-group-item" id="themeToggle">Theme (Light/Dark)</li>
+                <li class="list-group-item" id="assistantName">Assistant Name</li>
+                <li class="list-group-item" id="apiKeys">API Keys</li>
+                <li class="list-group-item" id="about">About</li>
+            </ul>
+        </div>
     </div>
 
 

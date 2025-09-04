@@ -76,7 +76,6 @@ $(document).ready(function () {
     }
 
 
-    // Hide Start Page and display blob
     eel.expose(hideStart)
     function hideStart() {
 
@@ -92,8 +91,50 @@ $(document).ready(function () {
     }
 
 
+    // When mic button is clicked
+    $("#MicBtn").click(function () {
+        var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "en-US";
+        recognition.start();
+
+        recognition.onresult = function(event) {
+            var transcript = event.results[0][0].transcript;
+            $("#chatbox").val(transcript);
+            eel.handle_voice_command(transcript)(function(response) {
+                $("#chat-canvas-body").append("<div>" + response.replace(/\n/g, "<br>") + "</div>");
+            });
+        };
+    });
+
+    $('#settingsOffcanvas .list-group-item').click(function() {
+        alert('You clicked: ' + $(this).text());
+
+    });
+
+
+    $("#changeVoice").click(function() {
+        eel.change_voice()(function(response) {
+            alert(response); // Show success or error message
+        });
+    });
+    $("#themeToggle").click(function() {
+        // Toggle dark-mode class on body
+        $("#mainBody").toggleClass("dark-mode");
+    });
+    $("#assistantName").click(function() {
+        alert("Assistant Name clicked!");
+        // Open a prompt or modal to change assistant name
+    });
+    $("#apiKeys").click(function() {
+        alert("API Keys clicked!");
+        // Show or edit API keys
+    });
+    $("#about").click(function() {
+        alert("About clicked!");
+        // Show about info
+    });
 });
 
 
 
-    
+
